@@ -7,7 +7,13 @@ description: Scaffolds a new TypeScript project from scratch. Use when starting 
 
 Ask the user to describe what the project is about. Use their response to populate `<project-name>` and `<project-description>` in later steps.
 
-## Step 2: Create package.json
+## Step 2: Install dependencies
+
+```bash
+bun add -d @biomejs/biome @types/bun @typescript/native-preview knip simple-git-hooks taze turbo ultracite vitest
+```
+
+## Step 3: Create package.json
 
 ```json
 {
@@ -17,7 +23,6 @@ Ask the user to describe what the project is about. Use their response to popula
   "type": "module",
   "scripts": {
     "lint": "biome check",
-    "setup": "bun run scripts/setup.ts",
     "types": "tsgo --build",
     "test": "vitest run",
     "unused": "knip",
@@ -26,11 +31,14 @@ Ask the user to describe what the project is about. Use their response to popula
   "dependencies": {},
   "devDependencies": {},
   "simple-git-hooks": {
-    "pre-commit": "bun run turbo validate"
+    "pre-commit": "make validate"
   },
   "knip": {
     "ignoreDependencies": [
       "turbo"
+    ],
+    "ignoreBinaries": [
+      "make"
     ]
   },
   "packageManager": "bun@<current-bun-version>"
@@ -38,12 +46,6 @@ Ask the user to describe what the project is about. Use their response to popula
 ```
 
 Replace `<current-bun-version>` with the output of `bun --version`.
-
-## Step 3: Install dependencies
-
-```bash
-bun add -d @biomejs/biome @types/bun @typescript/native-preview knip simple-git-hooks taze turbo ultracite vitest
-```
 
 ## Step 4: Create scripts/setup.ts
 
@@ -196,7 +198,17 @@ describe("setupRemoteCache", () => {
 });
 ```
 
-## Step 6: Create turbo.json
+## Step 6: Create Makefile
+
+```makefile
+setup:
+	bun run scripts/setup.ts
+
+validate:
+	bun run turbo validate
+```
+
+## Step 7: Create turbo.json
 
 ```json
 {
@@ -213,7 +225,7 @@ describe("setupRemoteCache", () => {
 }
 ```
 
-## Step 7: Create tsconfig.json
+## Step 8: Create tsconfig.json
 
 ```json
 {
@@ -242,7 +254,7 @@ describe("setupRemoteCache", () => {
 }
 ```
 
-## Step 8: Create biome.jsonc
+## Step 9: Create biome.jsonc
 
 ```jsonc
 {
@@ -261,7 +273,7 @@ describe("setupRemoteCache", () => {
 }
 ```
 
-## Step 9: Create .gitignore
+## Step 10: Create .gitignore
 
 ```
 # base
@@ -272,7 +284,7 @@ describe("setupRemoteCache", () => {
 node_modules
 ```
 
-## Step 10: Create .github/workflows/ci.yml
+## Step 11: Create .github/workflows/ci.yml
 
 ```yaml
 name: CI
@@ -302,13 +314,13 @@ jobs:
       - name: Install dependencies
         run: bun install
       - name: Validate
-        run: bun run turbo validate
+        run: make validate
         env:
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
           TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 ```
 
-## Step 11: Create vitest.config.ts
+## Step 12: Create vitest.config.ts
 
 ```ts
 import { defineConfig } from "vitest/config";
@@ -329,7 +341,7 @@ export default defineConfig({
 });
 ```
 
-## Step 12: Create AGENTS.md
+## Step 13: Create AGENTS.md
 
 ```markdown
 # <project-name>
@@ -352,7 +364,7 @@ Then create a symlink so tools that look for `CLAUDE.md` find the same file:
 ln -s AGENTS.md CLAUDE.md
 ```
 
-## Step 13: Create README.md
+## Step 14: Create README.md
 
 ```markdown
 # <project-name>
@@ -362,14 +374,14 @@ ln -s AGENTS.md CLAUDE.md
 ## Development
 
 1. Clone this repo
-2. Run `bun run setup`
+2. Run `make setup`
 
 ## License
 
 [MIT](LICENSE)
 ```
 
-## Step 14: Create .agents/commit.config.yml
+## Step 15: Create .agents/commit.config.yml
 
 ```yaml
 files:
@@ -384,6 +396,7 @@ files:
 - [ ] Asked user for project name and description
 - [ ] Created `package.json` with correct name, scripts, simple-git-hooks, and knip config
 - [ ] Installed devDependencies (`@biomejs/biome`, `@types/bun`, `@typescript/native-preview`, `knip`, `simple-git-hooks`, `taze`, `turbo`, `ultracite`, `vitest`)
+- [ ] Created `Makefile` with setup and validate commands
 - [ ] Created `scripts/setup.ts` with install, git hooks, and remote cache setup
 - [ ] Created `scripts/setup.test.ts` with tests for setup functions
 - [ ] Created `turbo.json` with lint, types, test, unused, and validate tasks
