@@ -1,6 +1,6 @@
 ---
 name: create-skill
-description: Creates or modifies agent skills. Use when the user wants to create, write, author, scaffold, edit, update, fix, or refactor a skill.
+description: Creates or modifies agent skills, including single-workflow and multi-workflow (orchestrator) skills. Use when the user wants to create, write, author, scaffold, edit, update, fix, or refactor a skill, or migrate a skill from single to multi-workflow.
 ---
 
 ## Step 1: Gather context
@@ -74,6 +74,27 @@ See `examples/` for complete skill examples by type:
 
 ## Step 4: Organize the directory
 
+### Single-workflow vs multi-workflow skills
+
+Most skills are **single-workflow** — one SKILL.md covers one concern. Use this by default.
+
+A **multi-workflow skill** is needed when a single domain has multiple distinct procedures that share a description trigger. SKILL.md becomes a router that dispatches to internal flows based on the task. Each flow is a self-contained mini-skill inside `flows/`.
+
+Use multi-workflow when:
+- The domain has 3+ distinct procedures (e.g., setup, create route, data fetching)
+- Procedures are independent — running one doesn't require another
+- A single description can't cover all procedures without being vague
+
+Migrate from single to multi when:
+- SKILL.md exceeds 200 lines even after splitting into references
+- The skill covers multiple unrelated procedures under one domain
+
+**Keep the description in sync** — when flows are added, modified, or removed, update SKILL.md's description to reflect current capabilities.
+
+For full structure and conventions, see `references/orchestrator.md`.
+
+### Single-workflow structure
+
 ```
 skill-name/
 ├── SKILL.md           # Required — <200 lines
@@ -121,3 +142,4 @@ Conditional flows, alternate paths, domain knowledge not always needed. Loaded o
 - [ ] references/ only for conditional flows
 - [ ] Paths as inline code, no markdown links
 - [ ] Ends with `## Acceptance checklist`
+- [ ] Multi-workflow: description reflects all current flows
