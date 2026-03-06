@@ -1,0 +1,6 @@
+# base
+*.local*
+*.tsbuildinfo
+.DS_Store
+.turbo
+node_modules

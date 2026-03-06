@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["ultracite/core"],
+  "formatter": {
+    "lineWidth": 100
+  },
+  "linter": {
+    "rules": {
+      "correctness": {
+        "noUnusedImports": "warn"
+      }
+    }
+  }
+}
