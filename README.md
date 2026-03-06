@@ -8,6 +8,7 @@ Collection of opinionated developer tools used across multiple projects.
 |-------|-------------|
 | [commit](skills/commit) | Wraps up work by syncing documentation, committing, pushing, and opening a pull request |
 | [component-testing](skills/component-testing) | Writes component tests using Vitest Browser Mode with Playwright for real-browser testing |
+| [convex](skills/convex) | Provides instructions for working with Convex backend projects |
 | [create-skill](skills/create-skill) | Creates or modifies agent skills |
 | [e2e-testing](skills/e2e-testing) | Writes end-to-end tests with Playwright Test for full user flow verification |
 | [environment-variables](skills/environment-variables) | Manages and validates environment variables |
