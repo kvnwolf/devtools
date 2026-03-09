@@ -10,6 +10,7 @@ Collection of opinionated developer tools used across multiple projects.
 | [component-testing](skills/component-testing) | Writes component tests using Vitest Browser Mode with Playwright for real-browser testing |
 | [convex](skills/convex) | Provides instructions for working with Convex backend projects |
 | [convex-auth](skills/convex-auth) | Provides instructions for working with Better Auth in Convex projects |
+| [convex-auth-admin](skills/convex-auth-admin) | Provides instructions for the Better Auth admin plugin in Convex projects |
 | [convex-auth-email-otp](skills/convex-auth-email-otp) | Provides instructions for the Better Auth email OTP plugin in Convex projects |
 | [convex-resend](skills/convex-resend) | Provides instructions for sending emails with Resend in Convex projects |
 | [create-skill](skills/create-skill) | Creates or modifies agent skills |
