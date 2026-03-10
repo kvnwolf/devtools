@@ -53,8 +53,10 @@ Web development tools — TanStack framework, forms, and browser testing.
 | agent-browser | Browser automation CLI for AI agents — navigate, fill forms, click, screenshot, scrape, and test web apps |
 | component-testing | Writes component tests using Vitest Browser Mode with Playwright |
 | e2e-testing | Writes end-to-end tests with Playwright Test |
+| shadcn | Provides instructions for building UIs with shadcn/ui components |
 | tanstack-form | Builds type-safe, accessible forms with TanStack Form |
 | tanstack-start | Provides instructions for working with TanStack Start projects |
+| vercel-react-best-practices | React and Next.js performance optimization guidelines from Vercel Engineering |
 
 **Hooks:**
 
