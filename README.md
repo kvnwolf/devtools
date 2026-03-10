@@ -25,6 +25,7 @@ Foundational developer tools for any TypeScript project.
 | Skill | Description |
 |-------|-------------|
 | base | Scaffolds new TypeScript projects from scratch |
+| find-skills | Helps users discover and install agent skills from the open skills ecosystem |
 | commit | Wraps up work by syncing documentation, committing, pushing, and opening a pull request |
 | create-skill | Creates or modifies agent skills |
 | environment-variables | Manages and validates environment variables with t3-env and Zod |
@@ -49,6 +50,7 @@ Web development tools — TanStack framework, forms, and browser testing.
 
 | Skill | Description |
 |-------|-------------|
+| agent-browser | Browser automation CLI for AI agents — navigate, fill forms, click, screenshot, scrape, and test web apps |
 | component-testing | Writes component tests using Vitest Browser Mode with Playwright |
 | e2e-testing | Writes end-to-end tests with Playwright Test |
 | tanstack-form | Builds type-safe, accessible forms with TanStack Form |
