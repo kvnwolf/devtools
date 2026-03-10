@@ -1,0 +1,9 @@
+{
+  "name": "base",
+  "description": "Foundational developer tools for any TypeScript project — project scaffolding, git workflow, testing, linting, and type-checking",
+  "version": "0.0.0",
+  "author": {
+    "name": "Kevin Wolf",
+    "email": "hi@kvnwolf.com"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "backend",
+  "description": "Backend development tools — Convex database, authentication with Better Auth, and email with Resend",
+  "version": "0.0.0",
+  "author": {
+    "name": "Kevin Wolf",
+    "email": "hi@kvnwolf.com"
+  }
+}

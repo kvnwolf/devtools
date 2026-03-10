@@ -1,25 +1,85 @@
 # Kevin Wolf's Devtools
 
-Collection of opinionated developer tools used across multiple projects.
+Plugin marketplace for Claude Code — opinionated developer tools used across multiple projects.
 
-## Skills
+## Installation
+
+```bash
+# Add the marketplace
+/plugin marketplace add kvnwolf/devtools
+
+# Install plugins
+/plugin install base
+/plugin install web
+/plugin install backend
+```
+
+## Plugins
+
+### base
+
+Foundational developer tools for any TypeScript project.
+
+**Skills:**
 
 | Skill | Description |
 |-------|-------------|
-| [commit](skills/commit) | Wraps up work by syncing documentation, committing, pushing, and opening a pull request |
-| [component-testing](skills/component-testing) | Writes component tests using Vitest Browser Mode with Playwright for real-browser testing |
-| [convex](skills/convex) | Provides instructions for working with Convex backend projects |
-| [convex-auth](skills/convex-auth) | Provides instructions for working with Better Auth in Convex projects |
-| [convex-auth-admin](skills/convex-auth-admin) | Provides instructions for the Better Auth admin plugin in Convex projects |
-| [convex-auth-organizations](skills/convex-auth-organizations) | Provides instructions for the Better Auth organization plugin in Convex projects |
-| [convex-auth-email-otp](skills/convex-auth-email-otp) | Provides instructions for the Better Auth email OTP plugin in Convex projects |
-| [convex-resend](skills/convex-resend) | Provides instructions for sending emails with Resend in Convex projects |
-| [create-skill](skills/create-skill) | Creates or modifies agent skills |
-| [e2e-testing](skills/e2e-testing) | Writes end-to-end tests with Playwright Test for full user flow verification |
-| [environment-variables](skills/environment-variables) | Manages and validates environment variables |
-| [tanstack-form](skills/tanstack-form) | Builds type-safe, accessible forms with TanStack Form |
-| [tanstack-start](skills/tanstack-start) | Provides instructions for working with TanStack Start projects |
-| [unit-testing](skills/unit-testing) | Writes unit tests following behavior-driven conventions with vitest |
+| base | Scaffolds new TypeScript projects from scratch |
+| commit | Wraps up work by syncing documentation, committing, pushing, and opening a pull request |
+| create-skill | Creates or modifies agent skills |
+| environment-variables | Manages and validates environment variables with t3-env and Zod |
+| unit-testing | Writes unit tests following behavior-driven conventions with Vitest |
+| work | Plans and executes development tasks through codebase exploration, interviews, and structured plans |
+
+**Hooks:**
+
+| Hook | Event | Description |
+|------|-------|-------------|
+| strip-git-c | PreToolUse (Bash) | Strips `git -C <path>` so commands run in the current directory |
+| enforce-bun | PreToolUse (Bash) | Replaces npm/npx with bun/bunx |
+| lint-changes | PostToolUse (Write\|Edit) | Runs Biome lint on edited files |
+| typecheck | PostToolUse (Write\|Edit) | Runs incremental TypeScript type-checking |
+| run-related-tests | PostToolUse (Write\|Edit) | Runs Vitest related tests on edited files |
+
+### web
+
+Web development tools — TanStack framework, forms, and browser testing.
+
+**Skills:**
+
+| Skill | Description |
+|-------|-------------|
+| component-testing | Writes component tests using Vitest Browser Mode with Playwright |
+| e2e-testing | Writes end-to-end tests with Playwright Test |
+| tanstack-form | Builds type-safe, accessible forms with TanStack Form |
+| tanstack-start | Provides instructions for working with TanStack Start projects |
+
+**Hooks:**
+
+| Hook | Event | Description |
+|------|-------|-------------|
+| enforce-agent-browser | PreToolUse (Bash) | Replaces `agent-browser` with `bunx agent-browser@latest` and adds `--headed` |
+
+### backend
+
+Backend development tools — Convex database, authentication, and email.
+
+**Skills:**
+
+| Skill | Description |
+|-------|-------------|
+| convex | Provides instructions for working with Convex backend projects |
+| convex-auth | Provides instructions for working with Better Auth in Convex projects |
+| convex-auth-admin | Provides instructions for the Better Auth admin plugin |
+| convex-auth-email-otp | Provides instructions for the Better Auth email OTP plugin |
+| convex-auth-organizations | Provides instructions for the Better Auth organization plugin |
+| convex-resend | Provides instructions for sending emails with Resend |
+
+**Hooks:**
+
+| Hook | Event | Description |
+|------|-------|-------------|
+| convex-generate | PostToolUse (Write\|Edit) | Runs `bun run convex generate` when files in `convex/` are edited |
 
 ## Development
 

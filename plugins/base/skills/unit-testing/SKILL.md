@@ -48,6 +48,10 @@ If you feel the need to mock an internal module, the code is doing too much or y
 
 For mocking patterns and DI examples, see `references/mocking.md`.
 
+## Coverage
+
+When a project has coverage thresholds configured, every file must meet them individually (`perFile: true`). Write tests that cover all branches and statements — if a file has unreachable code, that's a signal to simplify the implementation rather than lower thresholds.
+
 ## Acceptance Checklist
 
 - [ ] Test describes behavior, not implementation
@@ -55,3 +59,4 @@ For mocking patterns and DI examples, see `references/mocking.md`.
 - [ ] Test would survive an internal refactor
 - [ ] Mocks only at system boundaries
 - [ ] Co-located next to source file
+- [ ] Coverage thresholds pass for the file under test

@@ -5,4 +5,4 @@ files:
       - When new learnings from a task would benefit future agents (conventions, corrections to avoid repeating mistakes)
   - path: README.md
     update_when:
-      - When skills are added or removed (keep the skills table in alphabetical order)
+      - When plugins or skills are added or removed (keep tables in alphabetical order)

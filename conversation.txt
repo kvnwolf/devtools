@@ -1,0 +1,602 @@
+
+ ▐▛███▜▌   Claude Code v2.1.71
+▝▜█████▛▘  Opus 4.6 · Claude Max
+  ▘▘ ▝▝    ~/Developer/github.com/kvnwolf/devtools
+
+❯ analiza el proyecto actual; en este momento es un sistema simple de           
+distribucion de skills individuales, pero estoy pensando en convertirlo a un    
+plugin que los usuarios puedan instalar en sus proyectos;  analizando los       
+skills que tenemos actualmente, en que diferentes plugins lo convertirias? de   
+esa manera puedo instalar este repo como un plugin marketplace de claude code e 
+ instalar cada plugin individual y vertical a demanda                           
+
+⏺ Explore(Explore project structure and skills)
+  ⎿  Done (32 tool uses · 47.7k tokens · 1m 42s)
+  (ctrl+o to expand)
+
+⏺ Excelente. Tengo una visión completa del proyecto. Aquí mi análisis:
+
+  ---
+  Propuesta de Plugins Verticales
+
+  Tienes 16 skills que se agrupan naturalmente en 6 plugins verticales:
+
+  1. @devtools/core
+
+  Skills fundacionales que todo proyecto necesita.
+
+  ┌──────────────┬─────────────────────────────────────┐
+  │    Skill     │              Propósito              │
+  ├──────────────┼─────────────────────────────────────┤
+  │ base         │ Scaffold de proyectos TypeScript    │
+  ├──────────────┼─────────────────────────────────────┤
+  │ commit       │ Git workflow (commit, push, PR)     │
+  ├──────────────┼─────────────────────────────────────┤
+  │ create-skill │ Crear/modificar skills              │
+  ├──────────────┼─────────────────────────────────────┤
+  │ work         │ Planificación y ejecución de tareas │
+  └──────────────┴─────────────────────────────────────┘
+
+  Razonamiento: Son agnósticos de framework/backend. Cualquier proyecto los
+  puede usar.
+
+  ---
+  2. @devtools/testing
+
+  Todo lo relacionado con testing.
+
+  ┌───────────────────┬──────────────────────────────────────────────────────┐
+  │       Skill       │                      Propósito                       │
+  ├───────────────────┼──────────────────────────────────────────────────────┤
+  │ unit-testing      │ Tests unitarios con Vitest                           │
+  ├───────────────────┼──────────────────────────────────────────────────────┤
+  │ component-testing │ Tests de componentes con Vitest Browser Mode +       │
+  │                   │ Playwright                                           │
+  ├───────────────────┼──────────────────────────────────────────────────────┤
+  │ e2e-testing       │ Tests E2E con Playwright                             │
+  └───────────────────┴──────────────────────────────────────────────────────┘
+
+  Razonamiento: Vertical clara. Un usuario que necesita testing instala este
+  plugin y tiene las 3 capas de la pirámide de testing.
+
+  ---
+  3. @devtools/convex
+
+  El ecosistema Convex completo.
+
+  ┌───────────────┬─────────────────────────────────────┐
+  │     Skill     │              Propósito              │
+  ├───────────────┼─────────────────────────────────────┤
+  │ convex        │ Tables, queries, mutations, actions │
+  ├───────────────┼─────────────────────────────────────┤
+  │ convex-resend │ Emails con Resend                   │
+  └───────────────┴─────────────────────────────────────┘
+
+  Razonamiento: Todo lo que es Convex como backend, sin auth. Es el plugin base
+  de Convex.
+
+  ---
+  4. @devtools/convex-auth
+
+  Autenticación con Better Auth en Convex.
+
+  ┌───────────────────────────┬──────────────────────────────────────┐
+  │           Skill           │              Propósito               │
+  ├───────────────────────────┼──────────────────────────────────────┤
+  │ convex-auth               │ Setup y uso de Better Auth           │
+  ├───────────────────────────┼──────────────────────────────────────┤
+  │ convex-auth-admin         │ Plugin admin (roles, banning)        │
+  ├───────────────────────────┼──────────────────────────────────────┤
+  │ convex-auth-organizations │ Plugin organizations (multi-tenancy) │
+  ├───────────────────────────┼──────────────────────────────────────┤
+  │ convex-auth-email-otp     │ Plugin email OTP (passwordless)      │
+  └───────────────────────────┴──────────────────────────────────────┘
+
+  Razonamiento: Depende de @devtools/convex. Cada plugin de Better Auth es un
+  add-on, pero todos viven bajo el mismo paraguas de auth. Un usuario que no usa
+   Better Auth no necesita nada de esto.
+
+  ---
+  5. @devtools/tanstack
+
+  El ecosistema TanStack.
+
+  ┌────────────────┬───────────────────────────────────┐
+  │     Skill      │             Propósito             │
+  ├────────────────┼───────────────────────────────────┤
+  │ tanstack-start │ Framework TanStack Start          │
+  ├────────────────┼───────────────────────────────────┤
+  │ tanstack-form  │ Forms con TanStack Form + Base UI │
+  └────────────────┴───────────────────────────────────┘
+
+  Razonamiento: Vertical de framework frontend. Podría crecer con
+  tanstack-router, tanstack-query, etc.
+
+  ---
+  6. @devtools/config
+
+  Configuración y environment.
+
+  ┌───────────────────────┬────────────────────────────┐
+  │         Skill         │         Propósito          │
+  ├───────────────────────┼────────────────────────────┤
+  │ environment-variables │ t3-env + Zod para env vars │
+  └───────────────────────┴────────────────────────────┘
+
+  Razonamiento: Hoy solo tiene un skill, pero es un plugin natural para cosas
+  como linting config, CI/CD, etc. Alternativamente podrías meterlo en
+  @devtools/core.
+
+  ---
+  Grafo de Dependencias
+
+  @devtools/core          (independiente)
+  @devtools/testing       (independiente)
+  @devtools/config        (independiente, o merge con core)
+  @devtools/tanstack      (independiente)
+  @devtools/convex        (independiente)
+  @devtools/convex-auth   → depende de @devtools/convex
+
+  Recomendación
+
+  Si quieres mantenerlo simple al inicio, yo haría 5 plugins fusionando config
+  dentro de core:
+
+  1. core — base, commit, create-skill, work, environment-variables
+  2. testing — unit, component, e2e
+  3. convex — convex, convex-resend
+  4. convex-auth — convex-auth + todos sus plugins
+  5. tanstack — tanstack-start, tanstack-form
+
+  Esto te da un marketplace donde un usuario dice "uso Convex con Better Auth y
+  TanStack Start" e instala 4 plugins: core, convex, convex-auth, tanstack. Si
+  además quiere testing, agrega testing. Cada plugin es una vertical clara y
+  autocontenida.
+
+  ¿Quieres que profundice en cómo estructurar el mecanismo de
+  instalación/registro de plugins?
+
+✻ Worked for 1m 16s
+
+❯ me pareceria mejor dividirlo en plugin base (me sirve para cualquier tipo de  
+proyecto) web (cosas especificas a web development, frameworks que uso para web 
+ dev, etc) y convex (puede funcionar para todo tipo de proyecto)                
+
+⏺ Tiene sentido. Tres plugins claros con fronteras bien definidas:
+
+  1. base — Cualquier proyecto
+
+  ┌───────────────────────┬──────────────────────────────────┐
+  │         Skill         │            Propósito             │
+  ├───────────────────────┼──────────────────────────────────┤
+  │ base                  │ Scaffold de proyectos TypeScript │
+  ├───────────────────────┼──────────────────────────────────┤
+  │ commit                │ Git workflow                     │
+  ├───────────────────────┼──────────────────────────────────┤
+  │ create-skill          │ Crear/modificar skills           │
+  ├───────────────────────┼──────────────────────────────────┤
+  │ work                  │ Planificación y ejecución        │
+  ├───────────────────────┼──────────────────────────────────┤
+  │ environment-variables │ t3-env + Zod                     │
+  ├───────────────────────┼──────────────────────────────────┤
+  │ unit-testing          │ Tests con Vitest                 │
+  └───────────────────────┴──────────────────────────────────┘
+
+  2. web — Web development
+
+  ┌───────────────────┬──────────────────────────────────┐
+  │       Skill       │            Propósito             │
+  ├───────────────────┼──────────────────────────────────┤
+  │ tanstack-start    │ Framework                        │
+  ├───────────────────┼──────────────────────────────────┤
+  │ tanstack-form     │ Forms + Base UI                  │
+  ├───────────────────┼──────────────────────────────────┤
+  │ component-testing │ Vitest Browser Mode + Playwright │
+  ├───────────────────┼──────────────────────────────────┤
+  │ e2e-testing       │ Playwright Test                  │
+  └───────────────────┴──────────────────────────────────┘
+
+  3. convex — Backend Convex
+
+  ┌───────────────────────────┬─────────────────────────────────────┐
+  │           Skill           │              Propósito              │
+  ├───────────────────────────┼─────────────────────────────────────┤
+  │ convex                    │ Tables, queries, mutations, actions │
+  ├───────────────────────────┼─────────────────────────────────────┤
+  │ convex-resend             │ Emails con Resend                   │
+  ├───────────────────────────┼─────────────────────────────────────┤
+  │ convex-auth               │ Better Auth setup                   │
+  ├───────────────────────────┼─────────────────────────────────────┤
+  │ convex-auth-admin         │ Plugin admin                        │
+  ├───────────────────────────┼─────────────────────────────────────┤
+  │ convex-auth-organizations │ Plugin organizations                │
+  ├───────────────────────────┼─────────────────────────────────────┤
+  │ convex-auth-email-otp     │ Plugin email OTP                    │
+  └───────────────────────────┴─────────────────────────────────────┘
+
+  Grafo
+
+  base    (independiente)
+  web     (independiente, pero en la práctica se usa con base)
+  convex  (independiente, pero en la práctica se usa con base)
+
+  unit-testing encaja en base porque Vitest se usa para cualquier tipo de
+  proyecto (incluido Convex). Los testing de browser/E2E son específicos de web.
+   Y todo el ecosistema Convex+auth queda consolidado en un solo plugin.
+
+  ¿Avanzamos con la reestructuración?
+
+❯ inclusive el de convex podria llamarlo backend no?                            
+
+⏺ Sí, backend es mejor nombre. Hoy es Convex pero mañana podrías agregar skills
+  de Supabase, Drizzle, etc. Queda más extensible.
+
+  Estructura final
+
+  ┌─────────┬──────────────────────────────────────┬─────────────────────────┐
+  │ Plugin  │                Skills                │       Caso de uso       │
+  ├─────────┼──────────────────────────────────────┼─────────────────────────┤
+  │ base    │ base, commit, create-skill, work,    │ Cualquier proyecto      │
+  │         │ environment-variables, unit-testing  │                         │
+  ├─────────┼──────────────────────────────────────┼─────────────────────────┤
+  │ web     │ tanstack-start, tanstack-form,       │ Web development         │
+  │         │ component-testing, e2e-testing       │                         │
+  ├─────────┼──────────────────────────────────────┼─────────────────────────┤
+  │         │ convex, convex-resend, convex-auth,  │                         │
+  │ backend │ convex-auth-admin,                   │ Backend/infraestructura │
+  │         │ convex-auth-organizations,           │                         │
+  │         │ convex-auth-email-otp                │                         │
+  └─────────┴──────────────────────────────────────┴─────────────────────────┘
+
+  Un usuario típico instalaría base + los verticales que necesite. Un proyecto
+  fullstack con Convex: base + web + backend.
+
+  ¿Avanzamos con la reestructuración?
+
+❯ hagamos algo, mejor dejemoslo con que sea uno base, web-tanstack y            
+backend-convex; asi en un futuro podria tener mas tipos de web o de backend que 
+ te parece?                                                                     
+
+⏺ Perfecto. Así cada plugin es específico a su stack y el namespace permite
+  crecer:
+
+  ┌────────────────┬─────────────────────────────────────────────────────────┐
+  │     Plugin     │                         Skills                          │
+  ├────────────────┼─────────────────────────────────────────────────────────┤
+  │ base           │ base, commit, create-skill, work,                       │
+  │                │ environment-variables, unit-testing                     │
+  ├────────────────┼─────────────────────────────────────────────────────────┤
+  │ web-tanstack   │ tanstack-start, tanstack-form, component-testing,       │
+  │                │ e2e-testing                                             │
+  ├────────────────┼─────────────────────────────────────────────────────────┤
+  │ backend-convex │ convex, convex-resend, convex-auth, convex-auth-admin,  │
+  │                │ convex-auth-organizations, convex-auth-email-otp        │
+  └────────────────┴─────────────────────────────────────────────────────────┘
+
+  En el futuro podrías tener web-nextjs, web-remix, backend-supabase,
+  backend-drizzle, etc. sin conflictos.
+
+  ¿Avanzamos con la reestructuración?
+
+❯ si, otra cosa que quiero que hagas es que muevas los hooks que tengo en       
+@../../../../.claude/settings.json al plugin que corresponda, tambien  el de    
+@../devtools-old/claude-plugins/web/hooks/enforce-agent-browser.sh (con su      
+archivo de declaracion de hooks) y agregues otro para que en todo proyecto que  
+se use convex cuando se editen archivos en el folder convex entonces corra bun  
+run convex generate al escribir o editar archivos... entrevistame en detalle    
+siguiendo los patrones de como entrevistar en @skills/work/SKILL.md             
+  ⎿  Read ../../../../.claude/settings.json (121 lines)
+  ⎿  Read ../devtools-old/claude-plugins/web/hooks/enforce-agent-browser.sh (30 
+     lines)
+  ⎿  Read skills/work/SKILL.md (128 lines)
+
+⏺ Primero déjame entender bien todos los hooks que tienes actualmente.
+
+⏺ Explore(Explore all hook scripts)
+  ⎿  Done (20 tool uses · 24.5k tokens · 52s)
+  (ctrl+o to expand)
+
+⏺ Read 1 file (ctrl+o to expand)
+
+⏺ Perfecto, ya tengo el panorama completo. Ahora entiendo todos los hooks.
+  Empecemos la entrevista.
+
+  ---
+  Inventario actual de hooks:
+
+  ┌──────────────────────────┬────────────────────┬─────────────────────────┐
+  │           Hook           │       Evento       │        Qué hace         │
+  ├──────────────────────────┼────────────────────┼─────────────────────────┤
+  │                          │ SessionStart,      │ Fuerza evaluar skills   │
+  │ skill-evaluation.sh      │ UserPromptSubmit,  │ antes de escribir       │
+  │                          │ SubagentStart      │ código                  │
+  ├──────────────────────────┼────────────────────┼─────────────────────────┤
+  │                          │                    │ Elimina git -C <path>   │
+  │ strip-git-c.sh           │ PreToolUse (Bash)  │ para usar el directorio │
+  │                          │                    │  actual                 │
+  ├──────────────────────────┼────────────────────┼─────────────────────────┤
+  │ enforce-bun.sh           │ PreToolUse (Bash)  │ Reemplaza npm/npx por   │
+  │                          │                    │ bun/bunx                │
+  ├──────────────────────────┼────────────────────┼─────────────────────────┤
+  │                          │ PostToolUse        │ Corre biome lint        │
+  │ lint-changes.sh          │ (Write|Edit)       │ --write en archivos     │
+  │                          │                    │ editados                │
+  ├──────────────────────────┼────────────────────┼─────────────────────────┤
+  │ typecheck.sh             │ PostToolUse        │ Corre tsc --noEmit      │
+  │                          │ (Write|Edit)       │ --incremental           │
+  ├──────────────────────────┼────────────────────┼─────────────────────────┤
+  │                          │ PostToolUse        │ Corre bun vitest        │
+  │ run-related-tests.sh     │ (Write|Edit)       │ related en archivos     │
+  │                          │                    │ editados                │
+  ├──────────────────────────┼────────────────────┼─────────────────────────┤
+  │                          │                    │ Reemplaza agent-browser │
+  │ enforce-agent-browser.sh │ PreToolUse (Bash)  │  por bunx               │
+  │                          │                    │ agent-browser@latest y  │
+  │                          │                    │ agrega --headed         │
+  ├──────────────────────────┼────────────────────┼─────────────────────────┤
+  │                          │ PostToolUse        │ Corre bun run convex    │
+  │ NUEVO                    │ (Write|Edit)       │ generate al editar      │
+  │                          │                    │ archivos en convex/     │
+  └──────────────────────────┴────────────────────┴─────────────────────────┘
+
+  ---
+
+⏺ User answered Claude's questions:
+  ⎿  · El hook skill-evaluation.sh fuerza evaluar skills antes de escribir 
+     código. Esto es un comportamiento que aplica a TODO proyecto, no solo a un 
+     plugin específico. ¿Lo consideras parte del plugin base, o es algo que 
+     debería quedarse en tu configuración global de ~/.claude/settings.json 
+     fuera de cualquier plugin? → este no lo incluyamos, ya que en el skill de 
+     work enforzamos esto un poco mas
+
+⏺ Entendido, skill-evaluation.sh queda fuera.
+
+⏺ User answered Claude's questions:
+  ⎿  · El hook strip-git-c.sh elimina `git -C <path>` de comandos git. ¿Esto 
+     aplica a todo tipo de proyecto (plugin base) o también lo dejamos fuera de 
+     los plugins? → Plugin base
+
+⏺ User answered Claude's questions:
+  ⎿  · El hook enforce-bun.sh reemplaza npm/npx por bun/bunx. ¿Esto va en el 
+     plugin base (asumiendo que todos tus proyectos usan Bun) o es algo que 
+     debería ser configurable/opcional? → Plugin base
+
+⏺ User answered Claude's questions:
+  ⎿  · Los hooks PostToolUse de calidad de código: lint-changes.sh (biome), 
+     typecheck.sh (tsc), y run-related-tests.sh (vitest). Los tres verifican que
+      exista el config correspondiente antes de correr. ¿Van todos al plugin 
+     base? → Los 3 en base
+
+⏺ User answered Claude's questions:
+  ⎿  · El hook enforce-agent-browser.sh reemplaza `agent-browser` por `bunx 
+     agent-browser@latest` y agrega `--headed`. Esto es específico de web 
+     development. ¿Va en el plugin web-tanstack? → web-tantack; pero por ahora 
+     nombremos a ese plugin como web y al otro solo como backend
+
+⏺ Perfecto, renombramos: base, web, backend. Los sufijos de tecnología los
+  podemos agregar después si surgen más plugins del mismo tipo.
+
+⏺ User answered Claude's questions:
+  ⎿  · Para el NUEVO hook de Convex: cuando se edite un archivo dentro del 
+     directorio `convex/`, correría `bun run convex generate`. ¿Debería 
+     activarse SOLO cuando se editan archivos de schema (convex/schema.ts) o en 
+     CUALQUIER archivo dentro de convex/? → Cualquier archivo en convex/
+
+⏺ User answered Claude's questions:
+  ⎿  · Si `bun run convex generate` falla (por ejemplo, error de sintaxis en el 
+     schema), ¿el hook debería bloquear la operación (exit code 2) o solo 
+     mostrar el error como advertencia sin bloquear? → Bloquear (exit 2)
+
+⏺ User answered Claude's questions:
+  ⎿  · Ahora sobre la estructura de los plugins. Cada plugin necesita un 
+     hooks.json que declare sus hooks (como el que ya existe en devtools-old). 
+     ¿Los scripts de hooks deben vivir dentro de cada plugin (e.g. 
+     `plugins/base/hooks/enforce-bun.sh`) o prefieres otra estructura? → 
+     plugins/{name}/hooks/
+
+⏺ User answered Claude's questions:
+  ⎿  · Los skills actuales viven en `skills/`. Con la reestructuración, ¿los 
+     skills deberían moverse DENTRO de cada plugin (e.g. 
+     `plugins/base/skills/commit/`) o prefieres mantener `skills/` separado y 
+     que los plugins solo contengan hooks? → Dentro del plugin
+
+⏺ User answered Claude's questions:
+  ⎿  · ¿Cada plugin necesita un archivo de configuración principal además de 
+     hooks.json? Por ejemplo, un plugin.json o PLUGIN.md con metadata (nombre, 
+     descripción, dependencias entre plugins, etc.)? → investiga como funcionan 
+     los claude plugins + plugin marketplaces, que va en cada archivo de 
+     manifesto; entre menos cosas se repitan en todo lado, mejor
+
+⏺ claude-code-guide(Research Claude Code plugins format)
+  ⎿  Done (7 tool uses · 48.9k tokens · 41s)
+  (ctrl+o to expand)
+
+⏺ Ya tengo toda la info sobre el formato de plugins de Claude Code. Continúo la
+  entrevista.
+
+⏺ User answered Claude's questions:
+  ⎿  · El formato oficial de plugins de Claude Code usa 
+     `.claude-plugin/plugin.json` como manifiesto y auto-descubre skills/, 
+     hooks/, etc. en el root del plugin. La estructura sería:
+
+     ```
+     plugins/base/
+     ├── .claude-plugin/plugin.json
+     ├── hooks/hooks.json + *.sh
+     └── skills/commit/, unit-testing/, etc.
+     ```
+
+     Y este repo funcionaría como marketplace con 
+     `.claude-plugin/marketplace.json` en el root. Los usuarios harían `/plugin 
+     marketplace add kvnwolf/devtools` y luego `/plugin install base`. ¿Esta 
+     estructura te parece bien? → Sí, usar formato oficial
+
+⏺ User answered Claude's questions:
+  ⎿  · Sobre el directorio `skills/` actual que queda en el root del repo — una 
+     vez que los skills se muevan dentro de cada plugin, ¿qué hacemos con el 
+     directorio `skills/` original? → Eliminarlo
+
+⏺ User answered Claude's questions:
+  ⎿  · Los symlinks en `.agents/skills/` y `.claude/skills/` actualmente apuntan
+      a skills que usa ESTE propio repo (commit, create-skill, unit-testing). 
+     Después de la reestructuración, ¿este repo debería consumir su propio 
+     plugin base (instalando el plugin localmente) o mantenemos los symlinks 
+     actualizados a la nueva ruta? → Instalar como plugin
+
+⏺ User answered Claude's questions:
+  ⎿  · Los skills `create-plan` y `execute-plan` están vacíos (WIP). ¿Los 
+     incluimos como directorios vacíos en el plugin base, o los excluimos de la 
+     migración? → eliminarlos completamente
+
+⏺ User answered Claude's questions:
+  ⎿  · El skill `work` usa `EnterPlanMode`, `TeamCreate`, `SendMessage`, 
+     `TaskCreate`, etc. que son herramientas del sistema. ¿Este skill va al 
+     plugin base como está, o hay algo que quieras ajustar de él? → todos los 
+     skills se migran tal cual sin cambiar ni picha
+
+⏺ User answered Claude's questions:
+  ⎿  · Para el marketplace.json del root del repo, ¿qué nombre quieres para el 
+     marketplace? Este es el identificador que los usuarios usarán en `/plugin 
+     marketplace add`. → kvnwolf-devtools
+
+⏺ User answered Claude's questions:
+  ⎿  · Los archivos de configuración del root del repo (.agents/, turbo.json, 
+     biome.jsonc, vitest.config.ts, tsconfig.json) — ¿estos se mantienen para el
+      desarrollo del propio repo, o también necesitan reestructurarse? → 
+     Mantener
+
+⏺ User answered Claude's questions:
+  ⎿  · Para el `plugin.json` de cada plugin, necesito definir el `author`. ¿Qué 
+     nombre y email uso? → Kevin Wolf hi@kvnwolf.com
+
+⏺ User answered Claude's questions:
+  ⎿  · Respecto a los hooks que van en el plugin base: lint-changes.sh depende 
+     de biome, typecheck.sh de tsc, run-related-tests.sh de vitest. Actualmente 
+     cada script verifica si el config existe antes de correr. ¿Este 
+     comportamiento de "correr solo si el config existe" es suficiente, o 
+     preferirías que el plugin declare dependencias explícitas? → Guard actual 
+     es suficiente
+
+⏺ User answered Claude's questions:
+  ⎿  · ¿Quieres que el README.md del root del repo se actualice para reflejar la
+      nueva estructura de marketplace, o lo dejamos como está por ahora? → 
+     Actualizar
+
+⏺ User answered Claude's questions:
+  ⎿  · ¿El CLAUDE.md/AGENTS.md del root también necesita actualizarse para 
+     reflejar la nueva estructura, o lo dejamos como está? → Actualizar
+
+⏺ Déjame verificar un último detalle sobre el nuevo hook de convex generate.
+
+⏺ User answered Claude's questions:
+  ⎿  · Para el hook de `bun run convex generate` en el plugin backend: el hook 
+     debería verificar que existe un directorio `convex/` en el proyecto antes 
+     de intentar correr. ¿Hay algún otro guard que quieras? Por ejemplo, 
+     ¿verificar que `convex` esté en las dependencias del package.json? → Solo 
+     verificar directorio convex/
+
+⏺ User answered Claude's questions:
+  ⎿  · ¿Hay algo más que quieras agregar a esta reestructuración que no hayamos 
+     cubierto? Por ejemplo: ¿alguna configuración adicional por plugin, algún 
+     hook nuevo, algún skill que quieras crear, o alguna convención especial? → 
+     alguna ultima pregunta antes de tenerlo todo claro?
+
+⏺ User answered Claude's questions:
+  ⎿  · Los hooks actuales de `~/.claude/settings.json` que vamos a mover a 
+     plugins (enforce-bun, strip-git-c, lint, typecheck, tests) — una vez 
+     migrados, ¿los elimino de tu settings.json global? Si los dejas ahí Y están
+      en el plugin, correrían duplicados. → Sí, eliminarlos del global
+
+⏺ User answered Claude's questions:
+  ⎿  · Los scripts .sh de los hooks actualmente viven en ~/.claude/hooks/. Al 
+     moverlos al plugin, los archivos originales en ~/.claude/hooks/ quedarían 
+     huérfanos. ¿Los elimino también? → Sí, eliminarlos
+
+⏺ User answered Claude's questions:
+  ⎿  · El hook `skill-evaluation.sh` lo excluimos de los plugins, pero sigue 
+     registrado en tu settings.json global (SessionStart, UserPromptSubmit, 
+     SubagentStart). ¿Lo dejo en el global o también lo elimino de ahí? → 
+     Eliminarlo también
+
+⏺ Perfecto. Tengo todo claro. Aquí el resumen completo de lo que vamos a hacer:
+
+  ---
+  Plan de Reestructuración
+
+  Estructura final del repo
+
+  devtools/
+  ├── .claude-plugin/
+  │   └── marketplace.json          ← marketplace "kvnwolf-devtools"
+  ├── plugins/
+  │   ├── base/
+  │   │   ├── .claude-plugin/plugin.json
+  │   │   ├── hooks/
+  │   │   │   ├── hooks.json
+  │   │   │   ├── strip-git-c.sh
+  │   │   │   ├── enforce-bun.sh
+  │   │   │   ├── lint-changes.sh
+  │   │   │   ├── typecheck.sh
+  │   │   │   └── run-related-tests.sh
+  │   │   └── skills/
+  │   │       ├── base/
+  │   │       ├── commit/
+  │   │       ├── create-skill/
+  │   │       ├── work/
+  │   │       ├── environment-variables/
+  │   │       └── unit-testing/
+  │   ├── web/
+  │   │   ├── .claude-plugin/plugin.json
+  │   │   ├── hooks/
+  │   │   │   ├── hooks.json
+  │   │   │   └── enforce-agent-browser.sh
+  │   │   └── skills/
+  │   │       ├── tanstack-start/
+  │   │       ├── tanstack-form/
+  │   │       ├── component-testing/
+  │   │       └── e2e-testing/
+  │   └── backend/
+  │       ├── .claude-plugin/plugin.json
+  │       ├── hooks/
+  │       │   ├── hooks.json
+  │       │   └── convex-generate.sh    ← NUEVO
+  │       └── skills/
+  │           ├── convex/
+  │           ├── convex-resend/
+  │           ├── convex-auth/
+  │           ├── convex-auth-admin/
+  │           ├── convex-auth-organizations/
+  │           └── convex-auth-email-otp/
+  ├── .agents/                          ← se mantiene (config del propio repo)
+  ├── CLAUDE.md                         ← actualizar
+  ├── README.md                         ← actualizar
+  ├── package.json, turbo.json, etc.    ← se mantienen
+
+  Acciones concretas
+
+  1. Crear plugins/base/, plugins/web/, plugins/backend/ con sus
+  .claude-plugin/plugin.json y hooks/hooks.json
+  2. Mover skills de skills/ a plugins/{plugin}/skills/ (sin modificar
+  contenido)
+  3. Mover hooks de ~/.claude/hooks/ a plugins/base/hooks/ (strip-git-c,
+  enforce-bun, lint-changes, typecheck, run-related-tests)
+  4. Copiar enforce-agent-browser.sh de devtools-old a plugins/web/hooks/
+  5. Crear nuevo hook convex-generate.sh en plugins/backend/hooks/ (PostToolUse
+  Write|Edit, verifica dir convex/, bloquea con exit 2 si falla)
+  6. Crear .claude-plugin/marketplace.json en el root del repo
+  7. Eliminar skills/ del root (incluidos create-plan y execute-plan vacíos)
+  8. Eliminar hooks migrados de ~/.claude/settings.json y skill-evaluation.sh +
+  sus registros
+  9. Eliminar scripts .sh huérfanos de ~/.claude/hooks/
+  10. Actualizar README.md y CLAUDE.md
+  11. Actualizar symlinks en .agents/skills/ y .claude/skills/ para usar el
+  plugin instalado
+
+  ¿Procedo con la implementación?
+
+✻ Brewed for 4m 58s
+
+❯ antes de ponerte a trabajar me avisas para hacer una pausa                    
+
+⏺ Entendido. Todo el análisis y la entrevista están completos. Cuando me des luz
+   verde, arranco con la implementación. Tómate tu pausa.

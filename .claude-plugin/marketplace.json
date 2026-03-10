@@ -1,0 +1,16 @@
+{
+  "name": "kvnwolf-devtools",
+  "owner": {
+    "name": "Kevin Wolf",
+    "email": "hi@kvnwolf.com"
+  },
+  "metadata": {
+    "description": "Opinionated developer tools for TypeScript projects",
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    { "name": "base", "source": "./plugins/base" },
+    { "name": "web", "source": "./plugins/web" },
+    { "name": "backend", "source": "./plugins/backend" }
+  ]
+}

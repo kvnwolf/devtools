@@ -1,0 +1,13 @@
+{
+  "enabledPlugins": {
+    "base@kvnwolf-devtools": true
+  },
+  "extraKnownMarketplaces": {
+    "kvnwolf-devtools": {
+      "source": {
+        "source": "github",
+        "repo": "kvnwolf/devtools"
+      }
+    }
+  }
+}
