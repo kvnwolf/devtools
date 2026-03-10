@@ -6,5 +6,5 @@
 file_path=$(jq -r '.tool_input.file_path // empty')
 
 if [[ "$file_path" =~ \.(ts|tsx)$ ]]; then
-  bun vitest related "$file_path" --run --coverage || exit 2
+  bun vitest related "$file_path" --run || exit 2
 fi
