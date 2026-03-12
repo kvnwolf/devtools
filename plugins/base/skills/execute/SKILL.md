@@ -40,6 +40,7 @@ You are strictly a coordinator. You NEVER write code, edit files, or execute com
    - `team_name`: the team name from step 2
    - `name`: the task ID (e.g., `01-create-notifications`)
    - `subagent_type`: `"task-executor"`
+   - `isolation`: `"worktree"` — MUST be passed explicitly in the Agent tool call, do NOT rely on the agent's frontmatter alone
    - `prompt`: the absolute path to the task file (e.g., `/path/to/project/.agents/plans/001-user-notifications/01-create-notifications.yml`)
 
    The `task-executor` agent handles everything autonomously: reads the task file, executes steps, commits, merges to the plan branch, cleans up its branch, and updates all tracking files.
@@ -50,25 +51,42 @@ You are strictly a coordinator. You NEVER write code, edit files, or execute com
 
 Track progress via `TaskGet`/`TaskList`. Messages from teammates are delivered automatically — do NOT poll.
 
+**Status updates:** after each state change (task started, completed, unblocked), present a status table to the user showing all tasks with their current state and assigned agent.
+
 **Merges:** the `task-executor` handles merges and conflict resolution autonomously. If two teammates merge around the same time, the second one will rebase and retry automatically.
 
-**Unblocking:** as tasks complete, check if their completion unblocks new tasks (tasks whose `dependsOn` are now all `completed`). For each newly unblocked task, spawn a new `task-executor` teammate and assign it the task via `TaskUpdate`.
+**Unblocking:** as tasks complete, check if their completion unblocks new tasks (tasks whose `dependsOn` are now all `completed`). For each newly unblocked task, spawn a new `task-executor` teammate (always with `isolation: "worktree"` in the Agent tool call) and assign it the task via `TaskUpdate`.
+
+**Context limit recovery:** if a teammate hits its context limit and stops responding, read its task file to check progress. Spawn a new teammate for the same task — the `task-executor` handles resumption automatically by reading step progress from the task file.
 
 **Resumability:** if resuming an interrupted plan, read each task file to find:
 - Tasks with `status: completed` — skip
 - Tasks with `status: in_progress` — spawn a `task-executor` teammate (it handles resumption automatically by reading step progress)
 - Tasks with `status: pending` and satisfied dependencies — spawn and dispatch normally
 
-## 5. Completion
+## 5. Completion and cleanup
 
 When all tasks in the plan are `completed`:
 
 1. Update `plan.yml` status to `completed`
 2. Update `state.yml`: set `currentPlan` to `null`, update `lastCompletedPlan` to the plan ID, clear `activeTasks`
-3. Shut down all teammates via `SendMessage` with `type: "shutdown_request"`
-4. Clean up the team via `TeamDelete`
+3. Shut down all teammates via `SendMessage` with `type: "shutdown_request"`. If a teammate does not respond to the shutdown request, skip it — do not block on zombie agents.
+4. Clean up the team via `TeamDelete`. If it fails because an agent is still active, inform the user which agent is stuck and ask them to terminate it manually, then retry `TeamDelete`.
 
-## 6. Deliver
+## 6. QA review
+
+After cleanup, walk the user through a guided QA review of the completed work:
+
+1. Read `plan.yml` to get the user flow, goals, and edge cases
+2. Present each feature/flow as a numbered test case — tell the user exactly what to do and what to expect
+3. Ask the user for the result of each test (pass/fail + details)
+4. Collect ALL feedback before acting — do NOT fix issues one by one as they come in
+5. After all test cases are reviewed, present a summary of all gaps found
+6. Ask the user if they want to fix the gaps
+7. If yes, spawn `task-executor` agents (one per gap or group of related gaps) to fix the issues. Each fix agent receives a prompt describing the gap and the expected behavior.
+8. After fixes complete, offer to re-run the failed test cases
+
+## 7. Deliver
 
 Read `.agents/plan.config.yml` and check for a `completion.mode` field.
 
@@ -101,13 +119,16 @@ Read `references/pr-template.md` and follow it to push the plan branch and creat
 - [ ] Plan branch created and checked out
 - [ ] Team created via TeamCreate
 - [ ] Tasks created via TaskCreate
-- [ ] Teammates spawned as `task-executor` agents with `team_name`
+- [ ] Teammates spawned as `task-executor` agents with `team_name` and `isolation: "worktree"`
 - [ ] Tasks assigned to teammates via TaskUpdate
+- [ ] Status tables shown to user after each state change
 - [ ] Merges handled autonomously by task-executor agents
 - [ ] Newly unblocked tasks spawn new teammates as dependencies complete
+- [ ] Context limit recoveries handled by spawning replacement teammates
 - [ ] All task files updated with completed status, progress, and learnings
 - [ ] plan.yml and state.yml updated to reflect completion
-- [ ] Team shut down and cleaned up
+- [ ] Team shut down and cleaned up (zombie agents handled gracefully)
+- [ ] QA review completed with user — gaps identified and fixed
 - [ ] Delivery mode determined (from plan.config.yml or user choice, persisted for future)
 - [ ] PR created or squash merge completed
 - [ ] User informed with PR URL or squash merge confirmation
