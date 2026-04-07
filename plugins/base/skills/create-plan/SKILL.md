@@ -1,6 +1,6 @@
 ---
-name: plan
-description: Plans development tasks through codebase exploration, exhaustive user interviews, and structured file-based plans. Use when tackling a feature, bug fix, refactor, or any task that benefits from upfront planning. Generates plan files in .agents/plans/ for later execution with /execute.
+name: create-plan
+description: Plans development tasks through codebase exploration, exhaustive user interviews, and structured file-based plans. Use when tackling a feature, bug fix, refactor, or any task that benefits from upfront planning. Generates plan files in .agents/plans/ for later execution with /execute-plan.
 disable-model-invocation: true
 argument-hint: "[task description]"
 ---
@@ -73,7 +73,7 @@ Stage all generated files (`.agents/plans/<plan-id>/` and `.agents/plan.config.y
 After the commit, instruct the user:
 
 1. Run `/clear` to free context
-2. Run `/execute` (or `/execute <plan-id>`) to begin execution
+2. Run `/execute-plan` (or `/execute-plan <plan-id>`) to begin execution
 
 ## Acceptance checklist
 
@@ -88,4 +88,4 @@ After the commit, instruct the user:
 - [ ] All YAML content written in English
 - [ ] Plan detailed enough to execute in a fresh session with zero context
 - [ ] Plan files committed with `chore(plan): <plan-name>`
-- [ ] User instructed to /clear and /execute
+- [ ] User instructed to /clear and /execute-plan
